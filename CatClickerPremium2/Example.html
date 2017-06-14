@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Proving something</title>
+    <style media="screen">
+      .Hola{
+        width: 500px;
+        height: 400px;
+        background-color: white;
+      }
+      #Indice{
+        width: 500px;
+        height: 300px;
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="Indice" name="button"></button>
+    <p class="Hola"></p>
+  </body>
+  <script type="text/javascript" src="vanilla.js"></script>
+  <script type="text/javascript">
+    var variable = document.getElementById("Indice");
+    if (variable) {
+      variable.addEventListener("click", displayDate(), false);
+    }
+    function displayDate() {
+      var hey = document.getElementsByClassName("Hola");
+      hey.innerHTML = Date();
+    }
+  </script>
+</html>
