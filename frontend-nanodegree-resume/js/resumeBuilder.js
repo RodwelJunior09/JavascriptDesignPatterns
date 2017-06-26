@@ -3,18 +3,19 @@ This is empty on purpose! Your code to build the resume will go here.
  */
 var Model = {
   bio: {
-    name: "Rodwel",
+    name: "Rodwel Polanco Martinez",
     role: "Web Developer",
     contact: {
       mobile: "809-971-4957",
       email: "RodwelJunior@gmail.com",
       github: "RodwelJunior09",
+      blog: "file:///C:/wamp/www/Javascript%20Design%20Patterns/frontend-nanodegree-resume/index.html",
       twitter: "Rodwel09",
       location: "Santiago de los Caballeros",
     },
     WelcomeMessage: "Welcome Rodwel to my Bio",
     Skills: ["Awesome","Programing", "Hi Bro", "Teach"],
-    pictureUrl: ""
+    pictureUrl: "./images/RodwelPic.jpg",
   },
   work: {
     jobs:[
@@ -40,13 +41,13 @@ var Model = {
         title: "JavaScript_Resume",
         dates: "30/9/2016",
         Description: "This Another projects of Udacity",
-        images: []
+        images: ["./images/programmer.jpg"],
       },
       {
         title: "HTML/Css/resume",
         dates: "20/10/2013",
         Description: "Mastering the Css/Html",
-        images: []
+        images: ["./images/webdeveloment.jpg"],
       },
     ],
   },
@@ -58,7 +59,7 @@ var Model = {
         location: "Av Hispanoamericana Santiago",
         Majors: ['Computer_tecnician', 'HighSchool Degree'],
         years: '2012-2016',
-        'url': 'http://www.ipisa.edu.do/'
+        url: 'http://www.ipisa.edu.do/'
       },
       {
         NameSchools: "Cardenal Beras",
@@ -76,7 +77,7 @@ var Model = {
         dates: "2016",
         url: "https://classroom.udacity.com/courses/ud804/lessons/1930528550/concepts/19506785590923"
       }
-    ]
+    ],
   }
 
 };
@@ -85,20 +86,35 @@ var Octopus = {
   init: function() {
     View.init();
   },
+  getName: function() {
+    return Model.bio.name;
+  },
+  getRole: function() {
+    return Model.bio.role;
+  },
+  getPicture: function() {
+    return Model.bio.pictureUrl;
+  },
+  getWelcomeMsg: function() {
+    return Model.bio.WelcomeMessage;
+  },
+  getAllContacts: function() {
+    return Model.bio.contact;
+  },
   getAllWorkedJobs: function() {
-    return Model.work.jobs
+    return Model.work.jobs;
   },
   getAllSkills: function() {
-    return Model.bio.Skills
+    return Model.bio.Skills;
   },
   getAllProjects: function() {
-    return Model.Allprojects.projects
+    return Model.Allprojects.projects;
   },
   getSchools: function() {
-    return Model.Education.schools
+    return Model.Education.schools;
   },
   getOnlineCourse: function(){
-    return Model.Education.onlineCourse
+    return Model.Education.onlineCourse;
   }
 };
 
@@ -108,76 +124,111 @@ var View = {
     this.work = document.getElementById('workExperience');
     this.projects = document.getElementById('projects');
     this.education = document.getElementById('education');
-    this.onlineClass = document.getElementById('onlineClasses');
-    View.SkillsShow();
+    View.render();
+  },
+  HeaderShow: function() {
+    var Contacts = Octopus.getAllContacts();
+    var formattedName = HTMLheaderName.replace('%data%', Octopus.getName());
+    var formattedRole = HTMLheaderRole.replace('%data%', Octopus.getRole());
+    var formattedImage = HTMLbioPic.replace('%data%', Octopus.getPicture());
+    var formattedMsg = HTMLwelcomeMsg.replace('%data%', Octopus.getWelcomeMsg());
+    var formattedMobile = HTMLmobile.replace('%data%', Contacts.mobile);
+    var formattedemail = HTMLemail.replace('%data%', Contacts.email);
+    var formattedtwitter = HTMLtwitter.replace('%data%', Contacts.twitter);
+    var formattedgithub = HTMLtwitter.replace('%data%', Contacts.github);
+    var formattedblog = HTMLblog.replace('%data%', Contacts.blog);
+    var formattedlocation = HTMLlocation.replace('%data%', Contacts.location);
+    this.header.innerHTML += formattedName;
+    this.header.innerHTML += formattedRole;
+    this.header.innerHTML += formattedImage;
+    this.header.innerHTML += formattedMsg;
+    this.header.innerHTML += formattedMobile;
+    this.header.innerHTML += formattedemail;
+    this.header.innerHTML += formattedtwitter;
+    this.header.innerHTML += formattedgithub;
+    this.header.innerHTML += formattedblog;
+    this.header.innerHTML += formattedlocation;
   },
   SkillsShow: function() {
-    this.header.innerHTML = HTMLskillsStart;
     var Skills = Octopus.getAllSkills();
+    this.header.innerHTML += HTMLskillsStart;
+    var list = document.getElementById('skills');
     for (var i = 0; i < Skills.length; i++) {
-      var formatted = HTMLskills.replace('%data%', Skills[i]);
-      this.header.innerHTML += formatted;
+      var formattedSkills = HTMLskills.replace('%data%', Skills[i])
+      list.innerHTML += formattedSkills;
     }
-    View.WorkDisplay();
   },
   WorkDisplay: function() {
-    this.work.innerHTML = HTMLworkStart;
+    this.work.innerHTML += HTMLworkStart;
     var Works = Octopus.getAllWorkedJobs();
+    var Workdiv = document.getElementsByClassName('work-entry')[0];
     for (var i = 0; i < Works.length; i++) {
       var formattedEmployer = HTMLworkTitle.replace('%data%', Works[i].employer);
       var formattedTitle = HTMLworkTitle.replace('%data%', Works[i].title);
       var formattedEmployerTitle = formattedEmployer + formattedTitle;
-      this.work.innerHTML += formattedEmployerTitle;
+      Workdiv.innerHTML += formattedEmployerTitle;
       var formattedlocation = HTMLworkLocation.replace('%data%', Works[i].location);
-      this.work.innerHTML += formattedlocation;
+      Workdiv.innerHTML += formattedlocation;
       var formattedYears = HTMLworkDates.replace('%data%', Works[i].Dates);
-      this.work.innerHTML += formattedYears;
+      Workdiv.innerHTML += formattedYears;
       var formattedDescription = HTMLworkDescription.replace('%data%', Works[i].Description);
-      this.work.innerHTML += formattedDescription;
+      Workdiv.innerHTML += formattedDescription;
     }
-    View.ProjectsDisplay();
   },
   ProjectsDisplay: function() {
-    this.projects.innerHTML = HTMLprojectStart;
+    this.projects.innerHTML += HTMLprojectStart;
     var Projects = Octopus.getAllProjects();
+    var ProjectDiv = document.getElementsByClassName('project-entry')[0];
     for (var i = 0; i < Projects.length; i++) {
       var formattedTitle = HTMLprojectTitle.replace('%data%', Projects[i].title);
-      this.projects.innerHTML += formattedTitle;
-      var formattedDates = HTMLprojectDates.replace('%data%', Projects[i].Dates);
-      this.projects.innerHTML += formattedDates;
+      ProjectDiv.innerHTML += formattedTitle;
+      var formattedDates = HTMLprojectDates.replace('%data%', Projects[i].dates);
+      ProjectDiv.innerHTML += formattedDates;
       var formattedDescription = HTMLprojectDescription.replace('%data%', Projects[i].Description);
-      this.projects.innerHTML += formattedDescription;
+      ProjectDiv.innerHTML += formattedDescription;
+      var formattedImages = HTMLprojectImage.replace('%data%', Projects[i].images[0]);
+      ProjectDiv.innerHTML += formattedImages;
     }
-    View.EducationDisplay();
   },
   EducationDisplay: function() {
-    this.education.innerHTML = HTMLschoolStart;
+    this.education.innerHTML += HTMLschoolStart;
     var Education = Octopus.getSchools();
+    var divEducation = document.getElementsByClassName('education-entry')[0];
     for (var i = 0; i < Education.length; i++) {
       var formattedName = HTMLschoolName.replace('%data%', Education[i].NameSchools);
       var formattedDegree = HTMLschoolDegree.replace('%data%', Education[i].SchoolsDegree);
       var formattedNameDegree = formattedName + formattedDegree;
-      this.education.innerHTML += formattedNameDegree;
+      divEducation.innerHTML += formattedNameDegree;
       var formattedYears = HTMLschoolDates.replace('%data%', Education[i].years);
-      this.education.innerHTML += formattedYears;
+      divEducation.innerHTML += formattedYears;
       var formattedlocation = HTMLschoolLocation.replace('%data%', Education[i].location);
-      this.education.innerHTML += formattedlocation;
+      divEducation.innerHTML += formattedlocation;
+      var formattedMajor = HTMLschoolMajor.replace('%data%', Education[i].Majors);
+      divEducation.innerHTML += formattedMajor;
     }
-    View.EducationOnlineDisplay();
   },
   EducationOnlineDisplay: function(){
-    this.onlineClass.innerHTML = HTMLonlineClasses;
+    var divEducation = document.getElementsByClassName('education-entry')[0];
+    divEducation.innerHTML += HTMLonlineClasses;
     var Online = Octopus.getOnlineCourse();
     for (var i = 0; i < Online.length; i++) {
       var formattedTitle = HTMLonlineTitle.replace('%data%', Online[i].title);
       var formattedSchools = HTMLonlineSchool.replace('%data%', Online[i].schools);
       var formattedDegreeSchools = formattedTitle + formattedSchools;
-      this.onlineClass.innerHTML += formattedDegreeSchools;
+      divEducation.innerHTML += formattedDegreeSchools;
       var formattedDates = HTMLonlineDates.replace('%data%', Online[i].dates);
-      this.onlineClasses.innerHTML += formattedDates;
+      divEducation.innerHTML += formattedDates;
       var formattedUrl = HTMLonlineURL.replace('%data%', Online[i].url);
-      this.onlineClasses.innerHTML += formattedUrl;
+      divEducation.innerHTML += formattedUrl;
     }
+  },
+  render: function() {
+    View.HeaderShow();
+    View.SkillsShow();
+    View.WorkDisplay();
+    View.EducationDisplay();
+    View.ProjectsDisplay();
+    View.EducationOnlineDisplay();
   }
 }
 Octopus.init();
