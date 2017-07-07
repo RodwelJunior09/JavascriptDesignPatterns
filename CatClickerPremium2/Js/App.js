@@ -70,23 +70,21 @@ var Octopus = {
 
 var View = {
   init: function() {
+    var self = this;
     this.CatsList = document.getElementsByClassName('Cat');
     this.Display_Cat = document.getElementById('Cat_Apeared');
     this.Button = document.getElementById('Admin_Button');
     this.CatView();
   },
   CatView: function() {
-    if (document.body.addEventListener){ //Si se hace click en una parte del body
-      document.body.addEventListener('click', Searching_Element, false); //Cuando pase toma una funcion
-    }
-    function Searching_Element(evento){// Esta funcion busca el elemento en el que se dio click y toma el evento en si como argumento
-        evento = evento || window.event;
-        var target = evento.target || evento.srcElement; //aqui toma el elemento donde se dio click
-        if (target.className.match(/Cat/)) //Se verifica si la clase de ese elemento es Cat
-        {
-          Octopus.setCurrentCat(Octopus.getCats(), target.innerHTML);// tomando como el id del elemento clickeado
-          View.render(); //Manda un mensaje al View para que se renderize
-        }
+      for (var i = 0; i < this.CatsList.length; i++) {
+        var element = this.CatsList[i];
+        element.addEventListener('click', function(copyelement) {
+          return function() {
+            Octopus.setCurrentCat(Octopus.getCats(), copyelement.innerHTML);
+            View.render();
+          }
+        }(element));
       }
       var Buttons_Show = document.getElementById('Admin_Button'); //Boton Administrador
       var Send_info = document.getElementById('Send');// Mandar la informacion a modificar
@@ -95,7 +93,7 @@ var View = {
         document.getElementById('Admin_form').style.visibility = 'visible';
         document.getElementById('Send').style.visibility = 'visible';
       }, true);
-      Send_info.addEventListener('click', function() {// Si se preciona el Boton Mandar informacion 
+      Send_info.addEventListener('click', function() {// Si se preciona el Boton Mandar informacion
         Octopus.Modification_Current_Cat();
         View.render();
       }, true);
